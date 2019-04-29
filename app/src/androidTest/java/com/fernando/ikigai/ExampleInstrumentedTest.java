@@ -1,4 +1,4 @@
-package com.fernando.hikigai;
+package com.fernando.ikigai;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

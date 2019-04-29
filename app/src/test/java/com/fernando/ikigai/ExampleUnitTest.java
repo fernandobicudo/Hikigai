@@ -1,4 +1,4 @@
-package com.fernando.hikigai;
+package com.fernando.ikigai;
 
 import org.junit.Test;
 

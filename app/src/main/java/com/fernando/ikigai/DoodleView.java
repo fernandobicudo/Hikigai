@@ -1,6 +1,6 @@
 // DoodleView.java
 // Main View for the Doodlz app.
-package com.fernando.hikigai;
+package com.fernando.ikigai;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,7 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fernando.hikigai.R;
+import com.fernando.ikigai.R;
 
 import java.util.HashMap;
 import java.util.Map;

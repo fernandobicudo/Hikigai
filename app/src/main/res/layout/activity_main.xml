@@ -14,7 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     <fragment
-        android:name="com.fernando.hikigai.MainActivityFragment"
+        android:name="com.fernando.ikigai.MainActivityFragment"
         android:id="@+id/doodleFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

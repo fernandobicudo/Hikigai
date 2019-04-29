@@ -1,6 +1,6 @@
 // ColorDialogFragment.java
 // Allows user to set the drawing color on the DoodleView
-package com.fernando.hikigai;
+package com.fernando.ikigai;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import com.fernando.hikigai.R;
+import com.fernando.ikigai.R;
 
 // class for the Select Color dialog
 public class ColorDialogFragment extends DialogFragment {

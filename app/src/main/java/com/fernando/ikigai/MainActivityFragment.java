@@ -1,6 +1,6 @@
 // MainActivityFragment.java
 // Fragment in which the DoodleView is displayed
-package com.fernando.hikigai;
+package com.fernando.ikigai;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -20,7 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fernando.hikigai.R;
+import com.fernando.ikigai.R;
 
 public class MainActivityFragment extends Fragment {
     private DoodleView doodleView; // handles touch events and draws

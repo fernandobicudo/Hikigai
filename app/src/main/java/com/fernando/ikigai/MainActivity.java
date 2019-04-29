@@ -1,6 +1,6 @@
 // MainActivity.java
 // Sets MainActivity's layout
-package com.fernando.hikigai;
+package com.fernando.ikigai;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
