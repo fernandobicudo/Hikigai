@@ -165,6 +165,10 @@ public class MainActivityFragment extends Fragment {
             case R.id.print:
                 doodleView.printImage(); // print the current images
                 return true; // consume the menu event
+            case R.id.mode:
+                ModeDialogFragment modeDialog = new ModeDialogFragment();
+                modeDialog.show(getFragmentManager(), "mode dialog");
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

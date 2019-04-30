@@ -32,6 +32,7 @@ public class DoodleView extends View {
     private final Paint paintScreen; // used to draw bitmap onto screen
     private final Paint paintLine; // used to draw lines onto bitmap
 
+
     // Maps of current Paths being drawn and Points in those Paths
     private final Map<Integer, Path> pathMap = new HashMap<>();
     private final Map<Integer, Point> previousPointMap =  new HashMap<>();
@@ -240,4 +241,11 @@ public class DoodleView extends View {
             message.show();
         }
     }
+
+    public void setPaintMode (String mode) {
+
+        if (mode.equals("automatic"))
+        bitmapCanvas.drawCircle(400, 400, 200, paintLine);
+    }
+
 }

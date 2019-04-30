@@ -35,4 +35,11 @@
         android:icon="@drawable/ic_print_24dp"
         app:showAsAction="ifRoom">
     </item>
+    <item
+        android:id="@+id/mode"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/menuitem_mode"
+        app:showAsAction="ifRoom">
+    </item>
+
 </menu>

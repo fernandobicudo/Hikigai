@@ -16,9 +16,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import com.fernando.ikigai.R;
-
-// class for the Select Line Width dialog
+// class for the Select Line Width dialogLineWidthDialogFragment
 public class LineWidthDialogFragment extends DialogFragment {
     private ImageView widthImageView;
 
