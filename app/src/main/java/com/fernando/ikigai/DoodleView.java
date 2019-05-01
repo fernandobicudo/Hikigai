@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Region;
+import android.graphics.drawable.shapes.Shape;
 import android.provider.MediaStore;
 import android.support.v4.print.PrintHelper;
 import android.util.AttributeSet;
@@ -31,6 +33,17 @@ public class DoodleView extends View {
     private Canvas bitmapCanvas; // used to to draw on the bitmap
     private final Paint paintScreen; // used to draw bitmap onto screen
     private final Paint paintLine; // used to draw lines onto bitmap
+    private final Paint paintFilledShape;
+
+    private String shape;
+    private int totalHeight;
+    private int totalWidth;
+
+    private double centerx1, centerx2, centerx3, centery1, centery2, centery3, radius, diag;
+
+    private Shape circle1, circle2, circle3, circle4;
+
+    Path teste;
 
 
     // Maps of current Paths being drawn and Points in those Paths
@@ -49,6 +62,10 @@ public class DoodleView extends View {
         paintLine.setStyle(Paint.Style.STROKE); // solid line
         paintLine.setStrokeWidth(5); // set the default line width
         paintLine.setStrokeCap(Paint.Cap.ROUND); // rounded line ends
+
+        paintFilledShape = new Paint();
+        paintFilledShape.setStyle(Paint.Style.FILL);
+
     }
 
     // creates Bitmap and Canvas based on View's size
@@ -61,6 +78,8 @@ public class DoodleView extends View {
 
         getWidth();
     }
+
+
 
     // clear the painting
     public void clear() {
@@ -94,11 +113,16 @@ public class DoodleView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         // draw the background screen
+
+        ScreenDimensions();
+
         canvas.drawBitmap(bitmap, 0, 0, paintScreen);
 
         // for each path currently being drawn
         for (Integer key : pathMap.keySet())
             canvas.drawPath(pathMap.get(key), paintLine); // draw line
+
+
     }
 
     // handle touch event
@@ -245,7 +269,37 @@ public class DoodleView extends View {
     public void setPaintMode (String mode) {
 
         if (mode.equals("automatic"))
-        bitmapCanvas.drawCircle(400, 400, 200, paintLine);
+
+
+        bitmapCanvas.drawCircle((float)centerx1, (float) centery2, (float) 400, paintFilledShape);
+        bitmapCanvas.drawCircle((float)centerx3, (float) centery2, 400, paintFilledShape);
+        bitmapCanvas.drawCircle((float) centerx2, (float) centery1, 400, paintFilledShape);
+        bitmapCanvas.drawCircle((float)centerx2, (float) centery3, 400, paintFilledShape);
+
+
+    }
+
+    public void ScreenDimensions() {
+        totalHeight = getHeight();
+        totalWidth = getWidth();
+
+//        diag = Math.sqrt(4* (double)totalWidth/5);
+//
+//        radius = Math.sqrt((diag*diag)/2);
+
+        centerx1 = totalWidth/3;
+        centerx2 = (totalWidth)/2;
+        centerx3 = (totalWidth/3)*2;
+        centery1 = (totalHeight/2);
+        centery2 = totalHeight/2;
+        centery3 = (totalHeight/3)*2;
+
+
+
+
+
+
+
     }
 
 }
