@@ -1,6 +1,6 @@
 package com.fernando.ikigai;
+import android.graphics.Path;
 
-import android.graphics.drawable.ShapeDrawable;
 
 public class Ikigai {
 
@@ -13,14 +13,14 @@ public class Ikigai {
     private String profissao;
     private String vocacao;
 
-    private ShapeDrawable amaShape;
-    private ShapeDrawable pagoShape;
-    private ShapeDrawable bomShape;
-    private ShapeDrawable precisaShape;
+    private Path amaShape;
+    private Path pagoShape;
+    private Path bomShape;
+    private Path precisaShape;
 
 
     public Ikigai(String ama, String missao, String paixao, String bom, String pago, String precisa, String profissao, String vocacao,
-                  ShapeDrawable amaShape, ShapeDrawable pagoShape, ShapeDrawable bomShape, ShapeDrawable precisaShape) {
+                  Path amaShape, Path pagoShape, Path bomShape, Path precisaShape) {
         this.ama = ama;
         this.missao = missao;
         this.paixao = paixao;
@@ -35,35 +35,35 @@ public class Ikigai {
         this.precisaShape = precisaShape;
     }
 
-    public ShapeDrawable getAmaShape() {
+    public Path getAmaShape() {
         return amaShape;
     }
 
-    public void setAmaShape(ShapeDrawable amaShape) {
+    public void setAmaShape(Path amaShape) {
         this.amaShape = amaShape;
     }
 
-    public ShapeDrawable getPagoShape() {
+    public Path getPagoShape() {
         return pagoShape;
     }
 
-    public void setPagoShape(ShapeDrawable pagoShape) {
+    public void setPagoShape(Path pagoShape) {
         this.pagoShape = pagoShape;
     }
 
-    public ShapeDrawable getBomShape() {
+    public Path getBomShape() {
         return bomShape;
     }
 
-    public void setBomShape(ShapeDrawable bomShape) {
+    public void setBomShape(Path bomShape) {
         this.bomShape = bomShape;
     }
 
-    public ShapeDrawable getPrecisaShape() {
+    public Path getPrecisaShape() {
         return precisaShape;
     }
 
-    public void setPrecisaShape(ShapeDrawable precisaShape) {
+    public void setPrecisaShape(Path precisaShape) {
         this.precisaShape = precisaShape;
     }
 

@@ -12,16 +12,16 @@ import android.graphics.Point;
 import android.graphics.Region;
 import android.graphics.drawable.shapes.Shape;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.print.PrintHelper;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-
-import com.fernando.ikigai.R;
-
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 // custom View for drawing
@@ -41,7 +41,7 @@ public class DoodleView extends View {
 
     private double centerx1, centerx2, centerx3, centery1, centery2, centery3, radius, diag;
 
-    private Shape circle1, circle2, circle3, circle4;
+    private Path circle1, circle2, circle3, circle4;
 
     Path teste;
 
@@ -114,7 +114,7 @@ public class DoodleView extends View {
     protected void onDraw(Canvas canvas) {
         // draw the background screen
 
-        ScreenDimensions();
+        Dimensions();
 
         canvas.drawBitmap(bitmap, 0, 0, paintScreen);
 
@@ -268,38 +268,60 @@ public class DoodleView extends View {
 
     public void setPaintMode (String mode) {
 
+
         if (mode.equals("automatic"))
 
+        {
+//            ColorDialogFragment colorDialogFragment = new ColorDialogFragment();
+//           FragmentManager fragmentManager = colorDialogFragment.getFragmentManager();
+//            colorDialogFragment.show(fragmentManager, "color diag");
 
-        bitmapCanvas.drawCircle((float)centerx1, (float) centery2, (float) 400, paintFilledShape);
-        bitmapCanvas.drawCircle((float)centerx3, (float) centery2, 400, paintFilledShape);
-        bitmapCanvas.drawCircle((float) centerx2, (float) centery1, 400, paintFilledShape);
-        bitmapCanvas.drawCircle((float)centerx2, (float) centery3, 400, paintFilledShape);
 
+            circle1 = new Path();
+            circle2 = new Path();
+            circle3 = new Path();
+            circle4 = new Path();
 
+            paintFilledShape.setARGB(1234,12334,23345,23446);
+
+            circle1.addCircle((float)centerx1, (float) centery2, (float) radius, Path.Direction.CW);
+
+            bitmapCanvas.drawPath(circle1, paintFilledShape);
+
+            paintFilledShape.setARGB(7511,13000,44565,3321);
+
+            circle2.addCircle((float)centerx3, (float) centery2, (float)radius, Path.Direction.CW);
+
+            bitmapCanvas.drawPath(circle2, paintFilledShape);
+
+            paintFilledShape.setARGB(2345, 4561, 34544, 23454);
+
+            circle3.addCircle((float) centerx2, (float) centery1, (float)radius, Path.Direction.CW);
+
+            bitmapCanvas.drawPath(circle3, paintFilledShape);
+
+            paintFilledShape.setARGB(6546, 34566, 23468, 8433);
+
+            circle4.addCircle((float)centerx2, (float) centery3, (float) radius, Path.Direction.CW);
+
+            bitmapCanvas.drawPath(circle4, paintFilledShape);
+
+            Region test = new Region();
+
+            bitmapCanvas.clipPath(circle1, Region.Op.DIFFERENCE);
+        }
     }
 
-    public void ScreenDimensions() {
+    public void Dimensions() {
         totalHeight = getHeight();
         totalWidth = getWidth();
-
-//        diag = Math.sqrt(4* (double)totalWidth/5);
-//
-//        radius = Math.sqrt((diag*diag)/2);
-
-        centerx1 = totalWidth/3;
+        diag = (double)totalWidth/3;
+        radius = Math.sqrt((Math.pow(diag, 2))/2);
         centerx2 = (totalWidth)/2;
-        centerx3 = (totalWidth/3)*2;
-        centery1 = (totalHeight/2);
+        centerx1 = centerx2-diag/2;
+        centerx3 = centerx2+diag/2;
         centery2 = totalHeight/2;
-        centery3 = (totalHeight/3)*2;
-
-
-
-
-
-
-
+        centery1 = centery2-diag/2;
+        centery3 = centery2+diag/2;
     }
-
 }
