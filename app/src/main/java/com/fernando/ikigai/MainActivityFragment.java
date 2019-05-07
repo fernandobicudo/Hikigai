@@ -20,8 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fernando.ikigai.R;
-
 public class MainActivityFragment extends Fragment {
     private DoodleView doodleView; // handles touch events and draws
     private float acceleration;

@@ -9,42 +9,43 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.Region;
-import android.graphics.drawable.shapes.Shape;
+import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.print.PrintHelper;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
 // custom View for drawing
 public class DoodleView extends View {
     // used to determine whether user moved a finger enough to draw again
     private static final float TOUCH_TOLERANCE = 10;
-
     private Bitmap bitmap; // drawing area for displaying or saving
     private Canvas bitmapCanvas; // used to to draw on the bitmap
     private final Paint paintScreen; // used to draw bitmap onto screen
     private final Paint paintLine; // used to draw lines onto bitmap
     private final Paint paintFilledShape;
-
-    private String shape;
     private int totalHeight;
     private int totalWidth;
-
-    private double centerx1, centerx2, centerx3, centery1, centery2, centery3, radius, diag;
-
+    private double centerx1, centerx2, centerx3, centery1, centery2, centery3;
+    double radius, diag;
     private Path circle1, circle2, circle3, circle4;
-
-    Path teste;
-
+    private Point center1, center2, center3, center4;
+    private String mode;
+    Fragment fragment = new Fragment();
 
     // Maps of current Paths being drawn and Points in those Paths
     private final Map<Integer, Path> pathMap = new HashMap<>();
@@ -62,7 +63,6 @@ public class DoodleView extends View {
         paintLine.setStyle(Paint.Style.STROKE); // solid line
         paintLine.setStrokeWidth(5); // set the default line width
         paintLine.setStrokeCap(Paint.Cap.ROUND); // rounded line ends
-
         paintFilledShape = new Paint();
         paintFilledShape.setStyle(Paint.Style.FILL);
 
@@ -78,8 +78,6 @@ public class DoodleView extends View {
 
         getWidth();
     }
-
-
 
     // clear the painting
     public void clear() {
@@ -118,11 +116,11 @@ public class DoodleView extends View {
 
         canvas.drawBitmap(bitmap, 0, 0, paintScreen);
 
+        setPaintMode("automatic"); //força o desenho automático
+
         // for each path currently being drawn
         for (Integer key : pathMap.keySet())
             canvas.drawPath(pathMap.get(key), paintLine); // draw line
-
-
     }
 
     // handle touch event
@@ -136,6 +134,7 @@ public class DoodleView extends View {
                 action == MotionEvent.ACTION_POINTER_DOWN) {
             touchStarted(event.getX(actionIndex), event.getY(actionIndex),
                     event.getPointerId(actionIndex));
+
         }
         else if (action == MotionEvent.ACTION_UP ||
                 action == MotionEvent.ACTION_POINTER_UP) {
@@ -154,7 +153,7 @@ public class DoodleView extends View {
         Path path; // used to store the path for the given touch id
         Point point; // used to store the last point in path
 
-        // if there is already a path for lineID
+
         if (pathMap.containsKey(lineID)) {
             path = pathMap.get(lineID); // get the Path
             path.reset(); // resets the Path because a new touch has started
@@ -166,11 +165,11 @@ public class DoodleView extends View {
             point = new Point(); // create a new Point
             previousPointMap.put(lineID, point); // add the Point to the Map
         }
-
         // move to the coordinates of the touch
         path.moveTo(x, y);
         point.x = (int) x;
         point.y = (int) y;
+
     }
 
     // called when the user drags along the screen
@@ -266,6 +265,8 @@ public class DoodleView extends View {
         }
     }
 
+
+
     public void setPaintMode (String mode) {
 
 
@@ -276,52 +277,210 @@ public class DoodleView extends View {
 //           FragmentManager fragmentManager = colorDialogFragment.getFragmentManager();
 //            colorDialogFragment.show(fragmentManager, "color diag");
 
-
             circle1 = new Path();
             circle2 = new Path();
             circle3 = new Path();
             circle4 = new Path();
 
-            paintFilledShape.setARGB(1234,12334,23345,23446);
 
-            circle1.addCircle((float)centerx1, (float) centery2, (float) radius, Path.Direction.CW);
+
+            paintFilledShape.setARGB(192,0,64,128);
+
+            circle1.addCircle(center1.x, center1.y, (float)radius, Path.Direction.CW);
 
             bitmapCanvas.drawPath(circle1, paintFilledShape);
 
-            paintFilledShape.setARGB(7511,13000,44565,3321);
+            paintFilledShape.setARGB(192,64,128,255);
 
-            circle2.addCircle((float)centerx3, (float) centery2, (float)radius, Path.Direction.CW);
+            circle2.addCircle(center2.x, center2.y, (float)radius, Path.Direction.CW);
 
             bitmapCanvas.drawPath(circle2, paintFilledShape);
 
-            paintFilledShape.setARGB(2345, 4561, 34544, 23454);
+            paintFilledShape.setARGB(192, 128, 255, 192);
 
-            circle3.addCircle((float) centerx2, (float) centery1, (float)radius, Path.Direction.CW);
+            circle3.addCircle(center3.x, center3.y, (float)radius, Path.Direction.CW);
 
             bitmapCanvas.drawPath(circle3, paintFilledShape);
 
-            paintFilledShape.setARGB(6546, 34566, 23468, 8433);
+            paintFilledShape.setARGB(192, 255, 0, 64);
 
-            circle4.addCircle((float)centerx2, (float) centery3, (float) radius, Path.Direction.CW);
+            circle4.addCircle(center4.x, center4.y, (float)radius, Path.Direction.CW);
 
             bitmapCanvas.drawPath(circle4, paintFilledShape);
 
-            Region test = new Region();
-
-            bitmapCanvas.clipPath(circle1, Region.Op.DIFFERENCE);
+            paintPoints();
         }
     }
 
     public void Dimensions() {
+
+        //pega dimensões da tela
         totalHeight = getHeight();
         totalWidth = getWidth();
-        diag = (double)totalWidth/3;
-        radius = Math.sqrt((Math.pow(diag, 2))/2);
+
+        //calcula comprimento da diagonal entre os centros usando uma proporção em relação à largura da tela
+        diag = totalWidth/2.5;
+
+
+        //determina o raio das circunferências conforme a diagonal
+        radius = (int) Math.sqrt((Math.pow(diag, 2))/2);
+
+        //define coordenadas x e y para os centros de cada círculo
         centerx2 = (totalWidth)/2;
         centerx1 = centerx2-diag/2;
         centerx3 = centerx2+diag/2;
-        centery2 = totalHeight/2;
+        centery2 = totalHeight/2-50;
         centery1 = centery2-diag/2;
         centery3 = centery2+diag/2;
+
+        center1 = new Point();
+        center2 = new Point();
+        center3 = new Point();
+        center4 = new Point();
+
+        //define os centros dos círculos
+        center1.set((int)centerx2, (int)centery1);
+        center2.set((int)centerx1, (int)centery2);
+        center3.set((int)centerx3, (int)centery2);
+        center4.set((int)centerx2, (int)centery3);
+
+    }
+
+    //calcula a distância - hipotenusa - entre um dado centro de um círculo e um dado ponto
+    public double calculateDistance(Point center, Point point) {
+
+        double hipotenusa;
+
+        double cateto1, cateto2;
+
+        if (point.x > center.x)
+            cateto1 = point.x - center.x;
+        else
+            cateto1 = center.x - point.x;
+
+        if (point.y > center.y)
+            cateto2 = point.y - center.y;
+        else
+            cateto2 = center.y - point.y;
+
+        hipotenusa = Math.sqrt(Math.pow(cateto1, 2) + Math.pow(cateto2, 2));
+
+        return  hipotenusa;
+    }
+
+    public boolean testPoint (Point point, Point center) {
+
+
+        return calculateDistance(center, point) <= radius;
+    }
+
+    public void setCircleColor() {
+
+    }
+
+
+
+
+    public void paintPoints ()
+    {
+        Point point = new Point();
+
+        int i, j;
+
+
+        for (i = 0;i <= totalHeight+100; i++)
+        {
+            for (j=0; j<=totalWidth; j++)
+
+            {
+                point.set(i, j);
+
+                //se o dado ponto está situado a uma distância menor ou igual ao raio
+
+                if (calculateDistance(center1, point)<=radius
+                        &&calculateDistance(center2, point)<=radius
+                        &&calculateDistance(center3, point)<=radius
+                        &&calculateDistance(center4, point)<=radius) {
+
+                    paintFilledShape.setARGB(255, 255, 255, 255);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+                else if (calculateDistance(center1, point)<=radius
+                        //&&calculateDistance(center2, point)<=radius
+                        &&calculateDistance(center3, point)<=radius
+                        &&calculateDistance(center4, point)<=radius) {
+
+                    paintFilledShape.setARGB(255, 0, 0, 255);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+                else if (calculateDistance(center1, point)<=radius
+                        &&calculateDistance(center2, point)<=radius
+                        //&&calculateDistance(center3, point)<=radius
+                        &&calculateDistance(center4, point)<=radius) {
+
+                    paintFilledShape.setARGB(255, 255, 0, 255);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+                else if (/*calculateDistance(center1, point)<=radius &&*/
+                        calculateDistance(center2, point)<=radius
+                                &&calculateDistance(center3, point)<=radius
+                                &&calculateDistance(center4, point)<=radius) {
+
+                    paintFilledShape.setARGB(255, 0, 255, 0);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+                else if (calculateDistance(center1, point)<=radius
+                        //&&calculateDistance(center2, point)<=radius
+                        &&calculateDistance(center3, point)<=radius
+                        &&calculateDistance(center4, point)<=radius) {
+
+                    paintFilledShape.setARGB(255, 255, 0, 0);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+                else if (calculateDistance(center1, point)<=radius
+                        &&calculateDistance(center2, point)<=radius
+                        &&calculateDistance(center3, point)<=radius
+                    /*&&calculateDistance(center4, point)<=radius*/) {
+
+                    paintFilledShape.setARGB(255, 255, 255, 0);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+                else if (calculateDistance(center1, point)<=radius
+                        //&&calculateDistance(center2, point)<=radius
+                        &&calculateDistance(center3, point)<=radius
+                    /*&&calculateDistance(center4, point)<=radius*/) {
+
+                    paintFilledShape.setARGB(255, 255, 0, 255);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+                else if (calculateDistance(center1, point)<=radius
+                        &&calculateDistance(center2, point)<=radius
+                        /*&&calculateDistance(center3, point)<=radius
+                        &&calculateDistance(center4, point)<=radius*/) {
+
+                    paintFilledShape.setARGB(255, 0, 255, 255);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+                else if (/*calculateDistance(center1, point)<=radius*/
+                        calculateDistance(center2, point)<=radius
+                                //&&calculateDistance(center3, point)<=radius
+                                &&calculateDistance(center4, point)<=radius) {
+
+                    paintFilledShape.setARGB(255, 128, 128, 0);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+                else if (/*calculateDistance(center1, point)<=radius
+                        &&calculateDistance(center2, point)<=radius*/
+                        calculateDistance(center3, point)<=radius
+                                &&calculateDistance(center4, point)<=radius) {
+
+                    paintFilledShape.setARGB(255, 0, 0, 0);
+                    bitmapCanvas.drawPoint(i, j, paintFilledShape);
+                }
+            }
+        }
     }
 }
+
+
+
