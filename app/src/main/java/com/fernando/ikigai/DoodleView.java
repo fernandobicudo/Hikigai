@@ -209,6 +209,8 @@ public class DoodleView extends View {
         }
     }
 
+
+
     // called when the user finishes a touch
     private void touchEnded(int lineID) {
         Path path = pathMap.get(lineID); // get the corresponding Path
